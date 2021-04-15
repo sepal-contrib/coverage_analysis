@@ -39,6 +39,15 @@ class VisualizationTile(sw.Tile):
         end = self.io.end
         aoi = self.aoi_io.get_aoi_ee()
         
+        if self.io.measure == 'pixel_count_all':
+            
+            def unmask(image):
+                return image.unmask(1)
+            
+            reducer = ee.Reducer.count()
+            coll = coll.select('B3').map(unmask)
+            viz = pm.visParamCount
+
         if self.io.measure == 'pixel_count':
             reducer = ee.Reducer.count()
             coll = coll.select('B3')

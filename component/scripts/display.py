@@ -30,8 +30,12 @@ def display_result(ee_aoi, dataset, m, vis, measure, annual):
     except:
         pass
     
-    if measure == 'pixel_count' and annual:
+    if measure == 'pixel_count':
         _max = 20 if annual else 100
+        vis.update(max=_max)
+        
+    if measure == 'pixel_count_all':
+        _max = 40 if annual else 200
         vis.update(max=_max)
         
     # AOI borders in blue 

@@ -1,6 +1,7 @@
 #measures = ['pixel_count', 'ndvi_median', 'ndvi_stdDev']
 
 measures = [
+    {'text': 'Total pixel count (i.e. scene coverage)', 'value': 'pixel_count_all'},
     {'text': 'Cloud-free pixel count', 'value': 'pixel_count'},
     {'text': 'NDVI Median', 'value': 'ndvi_median'},
     {'text': 'NDVI Std. Dev.', 'value': 'ndvi_stdDev'}
