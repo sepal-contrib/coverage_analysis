@@ -140,7 +140,7 @@ class ExportTile(sw.Tile):
                 
                 # advance year and just get the year part so we make sure to get the 1st of Jan
                 advance_start = ee.Date(start).advance(1, 'year').format('Y')
-                year = ee.Date(advance_start).format('Y')
+                year = ee.Date(advance_start).format('Y').getInfo()
                 
                 # get last day of current year
                 end_y = ee.Date(advance_start).advance(-1, 'day').getInfo()['value']
