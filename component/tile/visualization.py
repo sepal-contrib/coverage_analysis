@@ -17,20 +17,38 @@ class VisualizationTile(sw.Tile):
         self.aoi_io = aoi_io
         self.io = io
         
-        # create an output alert 
-        self.output = sw.Alert()
-       
+        
+        self.stats = sw.Markdown(pm.stats)
+        self.measure = v.Select(
+            label   = ms.selection.measure,
+            v_model = None,
+            items = pm.measures     
+        )
+        
+        self.annual = v.Switch(
+                class_  = "ml-5",
+                label   = ms.selection.annual,
+                v_model = False
+            )
+        
         # add the widgets 
         self.m = sm.SepalMap()
         
+        # create an output alert 
+        self.output = sw.Alert() \
+            .bind(self.measure, self.io, 'measure') \
+            .bind(self.annual, self.io, 'annual')
+       
         # construct the Tile with the widget we have initialized 
         super().__init__(
             id_    = "visualization_widget", # the id will be used to make the Tile appear and disapear
             title  = ms.visualization.title, # the Title will be displayed on the top of the tile
-            inputs = [self.m],
+            inputs = [self.stats, self.measure, self.annual, self.m],
             output = self.output
         )
         
+        self.measure.observe(self._on_change, 'v_model')
+        self.annual.observe(self._on_change, 'v_model')
         
     def _on_change(self, change):
         

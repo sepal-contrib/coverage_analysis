@@ -74,19 +74,6 @@ class SelectionTile(sw.Tile):
                 v_model = False
             )
         
-        self.stats = sw.Markdown(pm.stats)
-        self.measure = v.Select(
-            label   = ms.selection.measure,
-            v_model = None,
-            items = pm.measures     
-        )
-        
-        self.annual = v.Switch(
-                class_  = "ml-5",
-                label   = ms.selection.annual,
-                v_model = False
-            )
-        
         # create the output alert 
         # this component will be used to display information to the end user when you lanch the process
         # it's hidden by default 
@@ -102,9 +89,7 @@ class SelectionTile(sw.Tile):
             .bind(self.l4, self.io, 'l4') \
             .bind(self.t2, self.io, 't2') \
             .bind(self.s2, self.io, 's2') \
-            .bind(self.sr, self.io, 'sr') \
-            .bind(self.measure, self.io, 'measure') \
-            .bind(self.annual, self.io, 'annual')
+            .bind(self.sr, self.io, 'sr')            
             
             
         # to launch the process you'll need a btn 
@@ -117,7 +102,7 @@ class SelectionTile(sw.Tile):
             title  = ms.selection.title, # the Title will be displayed on the top of the tile
             inputs = [self.start, self.start_picker, self.end, self.end_picker, 
                       self.select, self.l8, self.l7, self.l5, self.l4, self.t2, self.s2,
-                      self.sr_mess, self.sr, self.stats, self.measure, self.annual],
+                      self.sr_mess, self.sr],
             btn    = self.btn,
             output = self.output
         )
