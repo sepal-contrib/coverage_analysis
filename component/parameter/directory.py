@@ -29,7 +29,7 @@ Choose between Surface Reflectance or Top-of-Atmosphere collections for the slec
 stats = """  
 ### Selection of statistics
 
-Select the statistical measure you want to apply and switch on annual for per-year calculations
+Select the statistical measure you want to visualize. Switch to annual for per-year calculations.
 """
 
 stats_exp = """  

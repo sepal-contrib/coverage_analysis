@@ -23,7 +23,7 @@ class SelectionTile(sw.Tile):
         self.output = sw.Alert()
         
         # 
-        self.start = sw.Markdown(pm.end)
+        self.start = sw.Markdown(pm.start)
         self.start_picker = sw.DatePicker(label='Start date')
         
         self.end = sw.Markdown(pm.end)
