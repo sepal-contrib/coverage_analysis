@@ -1,6 +1,6 @@
 from pathlib import Path
 
-result_dir = Path().home().joinpath('module_results/bfast_preanalysis')
+result_dir = Path().home().joinpath('module_results/coverage_analysis')
 
 start = """  
 ### Start date selection

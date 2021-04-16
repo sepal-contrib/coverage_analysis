@@ -52,7 +52,8 @@
         "ndvi_median": "Include NDVI's median of cloud-free observations",
         "ndvi_stdDev": "Include NDVI's std. dev. of cloud-free observations",
         "annual_exp": " Include annual layers",
-        "total_exp": " Include layer(s) for all observations",
+        "total_exp": " Include layer(s) for all cloud-free observations",
+        "all": "Include layer(s) for all observations"
         "scale": "Resolution in meters",
         "asset_btn": "Export to asset",
         "sepal_btn": "Export to sepal",

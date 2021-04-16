@@ -23,7 +23,15 @@ class ExportTile(sw.Tile):
         # create an output alert 
         self.output = sw.Alert()
 
-        # 
+        #
+        self.temporal_exp = sw.Markdown(pm.temporal_exp)
+        
+        self.all = v.Switch(
+                class_  = "ml-5",
+                label   = ms.export.all,
+                v_model = True
+            )
+
         self.count = v.Switch(
                 class_  = "ml-5",
                 label   = ms.export.count,
@@ -49,6 +57,9 @@ class ExportTile(sw.Tile):
                 v_model = False
             )
         
+        
+        # Temporal extent
+        self.temporal_exp = sw.Markdown(pm.temporal_exp)
         self.annual_exp = v.Switch(
                 class_  = "ml-5",
                 label   = ms.export.annual_exp,
@@ -100,16 +111,28 @@ class ExportTile(sw.Tile):
         dataset = None
         if self.io.total_exp:
            
+            if self.io.all:
+                pixel_all = ( 
+                    coll
+                        .select('B3')
+                        .filterDate(start, end)
+                        .unmask(1)
+                        .reduce(ee.Reducer.count()).rename('count_total')
+                        .clip(aoi)
+                )
+                
+                dataset = pixel_all
+        
             if self.io.count:
                 pixel_total = ( 
                     coll
                         .select('B3')
                         .filterDate(start, end)
-                        .reduce(ee.Reducer.count()).rename('pixel_count_total')
+                        .reduce(ee.Reducer.count()).rename('cloudfree_count_total')
                         .clip(aoi)
                 )
                 
-                dataset = pixel_total
+                dataset = dataset.addBands(pixel_total) if dataset else pixel_total
             
             if self.io.ndvi_median:
                 ndvi_med_total = ( 
@@ -150,6 +173,20 @@ class ExportTile(sw.Tile):
                     end_y = end
 
                 if self.io.count:
+                    
+                    
+                    if self.io.all:
+                        pixel_all = ( 
+                            coll
+                                .select('B3')
+                                .filterDate(start, end_y)
+                                .unmask(1)
+                                .reduce(ee.Reducer.count()).rename(f'count_{year}')
+                                .clip(aoi)
+                        )
+
+                dataset = pixel_all
+                
                     # create collection and fill list
                     pixel_year = (
                         coll
