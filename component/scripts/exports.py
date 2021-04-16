@@ -71,7 +71,7 @@ def export_to_sepal(aoi_io, dataset, filename, scale, output):
         
     """
     # create the result_dir 
-    pm.result_dir.mkdir(parents=Tru, exist_ok=True)
+    pm.result_dir.mkdir(parents=True, exist_ok=True)
     
     # create merge name 
     filename_merge = pm.result_dir.joinpath(f'{filename}_merge.tif')

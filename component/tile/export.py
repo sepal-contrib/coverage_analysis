@@ -24,20 +24,20 @@ class ExportTile(sw.Tile):
         self.output = sw.Alert()
 
         #
-        self.temporal_exp = sw.Markdown(pm.temporal_exp)
+        self.stats_exp = sw.Markdown(pm.stats_exp)
         
-        self.all = v.Switch(
-                class_  = "ml-5",
-                label   = ms.export.all,
-                v_model = True
-            )
-
         self.count = v.Switch(
                 class_  = "ml-5",
                 label   = ms.export.count,
                 v_model = True
             )
 
+        self.all = v.Switch(
+                class_  = "ml-5",
+                label   = ms.export.all,
+                v_model = False
+            )
+        
         self.ndvi_median = v.Switch(
                 class_  = "ml-5",
                 label   = ms.export.ndvi_median,
@@ -51,15 +51,15 @@ class ExportTile(sw.Tile):
             )
 
         
-        self.total_exp = v.Switch(
-                class_  = "ml-5",
-                label   = ms.export.total_exp,
-                v_model = False
-            )
-        
         
         # Temporal extent
         self.temporal_exp = sw.Markdown(pm.temporal_exp)
+        self.total_exp = v.Switch(
+                class_  = "ml-5",
+                label   = ms.export.total_exp,
+                v_model = True
+            )
+        
         self.annual_exp = v.Switch(
                 class_  = "ml-5",
                 label   = ms.export.annual_exp,
@@ -81,6 +81,7 @@ class ExportTile(sw.Tile):
 
         # bindings
         self.output = sw.Alert() \
+            .bind(self.all, self.io, 'all') \
             .bind(self.count, self.io, 'count') \
             .bind(self.ndvi_median, self.io, 'ndvi_median') \
             .bind(self.ndvi_stdDev, self.io, 'ndvi_stdDev') \
@@ -92,7 +93,7 @@ class ExportTile(sw.Tile):
         super().__init__(
             id_ = "export_widget",
             title = ms.export.title,
-            inputs = [self.count, self.ndvi_median, self.ndvi_stdDev, self.total_exp, self.annual_exp, self.scale],
+            inputs = [self.stats_exp, self.all, self.count, self.ndvi_median, self.ndvi_stdDev, self.temporal_exp , self.total_exp, self.annual_exp, self.scale],
             output = self.output,
             btn = v.Layout(row=True, children = [self.asset_btn, self.sepal_btn])
         )
@@ -103,6 +104,9 @@ class ExportTile(sw.Tile):
 
     def _select_layers(self):
         
+        def unmask(image):
+            return image.unmask(1)
+            
         coll = self.io.dataset
         start = self.io.start
         end = self.io.end
@@ -112,11 +116,13 @@ class ExportTile(sw.Tile):
         if self.io.total_exp:
            
             if self.io.all:
+                
+                
                 pixel_all = ( 
                     coll
                         .select('B3')
                         .filterDate(start, end)
-                        .unmask(1)
+                        .map(unmask)
                         .reduce(ee.Reducer.count()).rename('count_total')
                         .clip(aoi)
                 )
@@ -172,21 +178,20 @@ class ExportTile(sw.Tile):
                 if end_y > end:
                     end_y = end
 
-                if self.io.count:
-                    
-                    
-                    if self.io.all:
-                        pixel_all = ( 
-                            coll
-                                .select('B3')
-                                .filterDate(start, end_y)
-                                .unmask(1)
-                                .reduce(ee.Reducer.count()).rename(f'count_{year}')
-                                .clip(aoi)
-                        )
+                if self.io.all:
+                    pixel_all = ( 
+                        coll
+                            .select('B3')
+                            .filterDate(start, end_y)
+                            .map(unmask)
+                            .reduce(ee.Reducer.count()).rename(f'count_{year}')
+                            .clip(aoi)
+                    )
 
-                dataset = pixel_all
+                    dataset = dataset.addBands(pixel_all) if dataset else pixel_all
                 
+                
+                if self.io.count:
                     # create collection and fill list
                     pixel_year = (
                         coll
@@ -197,7 +202,8 @@ class ExportTile(sw.Tile):
                     )
 
                     dataset = dataset.addBands(pixel_year) if dataset else pixel_year
-                    
+                   
+                
                 if self.io.ndvi_median:
                     
                     # create collection and fill list
@@ -211,6 +217,7 @@ class ExportTile(sw.Tile):
 
                     dataset = dataset.addBands(ndvi_med_year) if dataset else ndvi_med_year   
                 
+                
                 if self.io.ndvi_stdDev:
                     
                     # create collection and fill list
@@ -223,6 +230,7 @@ class ExportTile(sw.Tile):
                     )
 
                     dataset = dataset.addBands(ndvi_sd_year) if dataset else ndvi_sd_year 
+                    
                     
                 # reset start ot new start of the year
                 start = ee.Date(advance_start).format('Y-MM-dd').getInfo()

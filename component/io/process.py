@@ -20,11 +20,12 @@ class Process:
         self.annual = False
         
         # exports 
+        self.all = False
         self.count = True
         self.ndvi_median = False
         self.ndvi_stdDev = False
         self.annual_exp = False
-        self.total_exp = False
+        self.total_exp = True
         self.scale = 30
         
         # set up your outputs

@@ -1,10 +1,10 @@
 {
     "not_translated": "this message only exist in the en dict",
     "app": {
-        "title": "BFAST pre-analysis",
+        "title": "Coverage Analysis",
         "footer": "SEPAL \u00A9 {}",
         "drawer_item": {
-            "aoi": "Area of interest",
+            "aoi": "Area of Interest",
             "process": "Selection",
             "visualization": "Visualization",
             "export": "Export",
@@ -53,7 +53,7 @@
         "ndvi_stdDev": "Include NDVI's std. dev. of cloud-free observations",
         "annual_exp": " Include annual layers",
         "total_exp": " Include layer(s) for all cloud-free observations",
-        "all": "Include layer(s) for all observations"
+        "all": "Include layer(s) for all observations",
         "scale": "Resolution in meters",
         "asset_btn": "Export to asset",
         "sepal_btn": "Export to sepal",

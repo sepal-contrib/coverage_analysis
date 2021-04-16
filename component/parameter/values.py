@@ -1,25 +1,11 @@
 #measures = ['pixel_count', 'ndvi_median', 'ndvi_stdDev']
 
-measures = [
-    {'text': 'Total pixel count (i.e. scene coverage)', 'value': 'pixel_count_all'},
+measures = [   
     {'text': 'Cloud-free pixel count', 'value': 'pixel_count'},
+    {'text': 'Total pixel count (i.e. scene coverage)', 'value': 'pixel_count_all'},
     {'text': 'NDVI Median', 'value': 'ndvi_median'},
     {'text': 'NDVI Std. Dev.', 'value': 'ndvi_stdDev'}
 ]
-
-# speckle filters to select from
-speckle_filters = [
-    {'text': 'No Speckle filter', 'value': 'NONE'}, 
-    {'text': 'Refined Lee (zoom dependent)', 'value': 'REFINED_LEE'},
-    {'text': 'Quegan Filter', 'value': 'QUEGAN'}
-]
-
-layer_select = [
-        {'key': 0, 'label': 'Backscatter RGB (HH, HV, HH/HV power ratio)', 'value': 'RGB'},
-        {'key': 1, 'label': 'Radar Forest Degradation Index (RFDI, Mitchard et al. 2012)', 'value': 'RFDI'},
-        {'key': 2, 'label': 'Forest/Non-Forest', 'value': 'FNF'}
-    ]
-
 
 # name of the file in the output directory 
 def asset_name(aoi_io, io, fnf=False):
