@@ -12,7 +12,7 @@ def asset_name(aoi_io, io, fnf=False):
     """return the standard name of your asset/file"""
     
 
-    filename = f"bfast_coverage_{aoi_io.get_aoi_name()}_{io.start}_{io.end}"
+    filename = f"coverage_{aoi_io.get_aoi_name()}_{io.start}_{io.end}"
 
     if io.l8 != 'NONE':
         filename += f"_L8"
