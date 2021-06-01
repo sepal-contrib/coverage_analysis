@@ -19,12 +19,8 @@ class Process (model.Model):
     annual = Any(False).tag(sync=True) 
 
     # exports 
-    all = Any(False).tag(sync=True) 
-    count = Any(True).tag(sync=True) 
-    ndvi_median = Any(False).tag(sync=True) 
-    ndvi_stdDev = Any(False).tag(sync=True) 
-    annual_exp = Any(False).tag(sync=True) 
-    total_exp = Any(True).tag(sync=True) 
+    stats= Any(['count']).tag(sync=True)
+    temps = Any(['total_exp']).tag(sync=True)
     scale = Any(30).tag(sync=True) 
 
     # set up your outputs

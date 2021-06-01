@@ -18,7 +18,6 @@ class VisualizationTile(sw.Tile):
         self.model = model
         
         # widgets
-        self.stats = sw.Markdown(pm.stats)
         self.measure = v.Select(label=ms.selection.measure, v_model=None, items=pm.measures)
         self.annual = v.Switch(class_ ="ml-5", label=ms.selection.annual, v_model=False)
         
@@ -32,7 +31,7 @@ class VisualizationTile(sw.Tile):
         super().__init__(
             id_    = "visualization_widget", # the id will be used to make the Tile appear and disapear
             title  = ms.visualization.title, # the Title will be displayed on the top of the tile
-            inputs = [self.stats, self.measure, self.annual, self.m],
+            inputs = [self.measure, self.annual, self.m],
             alert = sw.Alert()
         )
         

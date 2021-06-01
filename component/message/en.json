@@ -20,7 +20,8 @@
         "no_sensors": "You need to select at least 1 sensor",
         "gee_btn":         "Generate EE Asset",
         "task_start":      "Task launched in GEE",
-        "task_launched":   "Export of {} launched in GEE"
+        "task_launched":   "Export of {} launched in GEE",
+        "no_input": "One or multiple inputs are missing"
     },
     "visualization": {
         "title": "Visualize results",
@@ -42,17 +43,13 @@
     "export": {
         "title": "Export data",
         "no_result": "No result to display yet",
-        "count": "Include count of cloud-free observation per pixel",
-        "ndvi_median": "Include NDVI's median of cloud-free observations",
-        "ndvi_stdDev": "Include NDVI's std. dev. of cloud-free observations",
-        "annual_exp": " Include annual calculation(s)",
-        "total_exp": " Include full timespan calculation(s)",
-        "all": "Include count for all observations per pixel",
         "scale": "Resolution in meters",
         "asset_btn": "Export to asset",
         "sepal_btn": "Export to sepal",
         "down_btn": "Download tif file",
-        "file_exist": "The file {} already exist in your sepal folder"
+        "file_exist": "The file {} already exist in your sepal folder",
+        "stats": "Select statistical measure(s) to export",
+        "temps": "Select full time-period and/or compute annual bands"
     },
     "download": {
         "merge_tile": "Merging the tile from Gdrive",
