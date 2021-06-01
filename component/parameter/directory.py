@@ -2,30 +2,6 @@ from pathlib import Path
 
 result_dir = Path().home().joinpath('module_results/coverage_analysis')
 
-start = """  
-### Start date selection
-
-Pick the date of the timeseries' start.
-"""
-
-end = """  
-### End date selection
-
-Pick the date of the timeseries' end.
-"""
-
-select = """  
-### Satellite selection
-
-Select the satellite(s) you want to include for the pre-analysis.
-"""
-
-sr = """
-### Selection of collection type
-
-Choose between Surface Reflectance or Top-of-Atmosphere collections for the slected satellites.
-"""
-
 stats = """  
 ### Selection of statistics
 

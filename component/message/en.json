@@ -12,19 +12,9 @@
         }
     },
     "process": {
-        "small_slider":    "{} is not big enough, please provide a value > to 50",
         "end_computation": "Computation complete",
-        "alos_mosaic":     "ALOS mosaic",
-        "slider":          "Select Year",
-        "filter":          "Select a Speckle filter",
-        "ls_mask":         "Apply Layover/Shadow mask",
-        "dB":              "Scale output to dB scale ",
-        "textfield":       "GEE Asset Basename",
-        "process":         "Click & Go",
         "title":           "Process tile",
         "no_aoi":          "Please provide an AOI",
-        "no_slider":       "Please provide a year for the mosaic",
-        "no_textfield":    "Please provide a basename for the GEE Asset",
         "gee_btn":         "Generate EE Asset",
         "task_start":      "Task launched in GEE",
         "task_launched":   "Export of {} launched in GEE"
@@ -35,15 +25,16 @@
     },
     "selection": {
         "title": "Parameter selection",
-        "l8": "Landsat 8",
-        "l7": "Landsat 7",
-        "l5": "Landsat 5",
-        "l4": "Landsat 4",
+        "time_range": "Time range of the analysis",
+        "start": "Pick the date of the timeseries' start",
+        "end": "Pick the date of the timeseries' end",
+        "collection": "Select collection parameters",
+        "sensor": "Select sensors",
         "t2": "Include Tier 2 products for selected Landsat satellites",
-        "s2": "Sentinel-2",
         "sr": "Surface Reflectance Collection",
         "measure": "Statistical measure",
-        "annual": "Annual statistics"
+        "annual": "Annual statistics",
+        "btn": "compute dataset"
     },
     "export": {
         "title": "Export data",

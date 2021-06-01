@@ -6,7 +6,7 @@ from sepal_ui.scripts import utils as su
 import ipyvuetify as v
 
 from component.message import ms
-from component.scripts import * 
+from component import scripts as cs  
 from component import parameter as pm
 
 # create an empty result tile that will be filled with displayable plot, map, links, text
@@ -21,41 +21,29 @@ class SelectionTile(sw.Tile):
         self.export_tile = export_tile
         
         # widgets
-        self.start = sw.Markdown(pm.start)
-        self.start_picker = sw.DatePicker(label='Start date')
-        self.end = sw.Markdown(pm.end)
-        self.end_picker = sw.DatePicker(label='End date')
+        w_time_title = v.Html(tag='H3', class_='mt-3', children=[ms.selection.time_range])
+        self.start_picker = sw.DatePicker(label=ms.selection.start)
+        self.end_picker = sw.DatePicker(label=ms.selection.end)
+        w_time_range = v.Layout(row=True, children=[self.start_picker, self.end_picker])
         
-        self.select = sw.Markdown(pm.select)
-        self.l8 = v.Switch(class_  = "ml-5",label   = ms.selection.l8,v_model = False)
-        self.l7 = v.Switch(class_  = "ml-5",label   = ms.selection.l7,v_model = False)
-        self.l5 = v.Switch(class_  = "ml-5",label   = ms.selection.l5,v_model = False)
-        self.l4 = v.Switch(class_  = "ml-5",label   = ms.selection.l4,v_model = False)
+        w_collection_title = v.Html(tag='H3', class_='mt-3', children=[ms.selection.collection])
+        self.sensors = v.Select(label=ms.selection.sensor, items=pm.sensors, v_model=None, chips=True, multiple=True)
         self.t2 = v.Switch(class_  = "ml-5",label   = ms.selection.t2,v_model = False)
-        self.s2 = v.Switch(class_  = "ml-5",label   = ms.selection.s2,v_model = False)
-                           
-        self.sr_mess = sw.Markdown(pm.sr)
         self.sr = v.Switch(class_  = "ml-5",label   = ms.selection.sr,v_model = False)
         
         self.model \
             .bind(self.start_picker, 'start')  \
             .bind(self.end_picker, 'end')  \
-            .bind(self.l8, 'l8') \
-            .bind(self.l7, 'l7') \
-            .bind(self.l5, 'l5') \
-            .bind(self.l4, 'l4') \
+            .bind(self.sensors, 'sensors') \
             .bind(self.t2, 't2') \
-            .bind(self.s2, 's2') \
             .bind(self.sr, 'sr')            
         
         # construct the Tile with the widget we have initialized 
         super().__init__(
             id_    = "selection_widget", # the id will be used to make the Tile appear and disapear
             title  = ms.selection.title, # the Title will be displayed on the top of the tile
-            inputs = [self.start, self.start_picker, self.end, self.end_picker, 
-                      self.select, self.l8, self.l7, self.l5, self.l4, self.t2, self.s2,
-                      self.sr_mess, self.sr],
-            btn    = sw.Btn(),
+            inputs = [w_time_title, w_time_range, w_collection_title, self.sensors, self.t2, self.sr],
+            btn    = sw.Btn(ms.selection.btn),
             alert = sw.Alert()
         )
         
@@ -63,22 +51,18 @@ class SelectionTile(sw.Tile):
         self.btn.on_event("click", self._on_run)
         
     
-    @su.loading_button(debug=False)
+    @su.loading_button(debug=True)
     def _on_run(self, widget, data, event): 
             
         # check that the input that you're gonna use are set (Not mandatory)
         if not self.alert.check_input(self.aoi_model.name, ms.process.no_aoi): return widget.toggle_loading()
                    
-        dataset = analysis(
+        dataset = cs.analysis(
             self.aoi_model.feature_collection,
             self.model.start,
             self.model.end,
-            self.model.l8,
-            self.model.l7,
-            self.model.l5,
-            self.model.l4,
+            self.model.sensors,
             self.model.t2,
-            self.model.s2,
             self.model.sr,
         )
 

@@ -7,6 +7,14 @@ measures = [
     {'text': 'NDVI Std. Dev.', 'value': 'ndvi_stdDev'}
 ]
 
+sensors = [
+    {'text': 'Landsat 8', 'value': 'l8'},
+    {'text': 'Landsat 7', 'value': 'l7'},
+    {'text': 'Landsat 5', 'value': 'l5'},
+    {'text': 'Landsat 4', 'value': 'l4'},
+    {'text': 'Sentinel 2', 'value': 's2'},
+]
+
 # name of the file in the output directory 
 def asset_name(aoi_model, model, fnf=False):
     """return the standard name of your asset/file"""
