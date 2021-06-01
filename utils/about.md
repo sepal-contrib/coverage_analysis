@@ -1,13 +1,11 @@
-
-
 ### Coverage analysis tool for optical data
 
-This module allows for creating maps of cloud-free observations for major optical satellites as available on Google's Earth Engine Platform.
-The framework follows the main ideas from bfasts' countObs and summaryBrick functions as described [here](http://www.loicdutrieux.net/bfastSpatial/#Data_Inventory). 
+Module using the `sepal_ui` framework and an interactive **Voila** dashboard to create maps of cloud-free observations for major optical satellites as available on Google's Earth Engine Platform.
+The framework follows themain ideas from bfasts' countObs and summaryBrick functions as described [here](http://www.loicdutrieux.net/bfastSpatial/#Data_Inventory). 
 
-For B-Fast sepcific requirements [this research article](https://www.researchgate.net/publication/283695325_Error_Sources_in_Deforestation_Detection_Using_BFAST_Monitor_on_Landsat_Time_Series_Across_Three_Tropical_Sites) by Schultz et al. 2013 for further background. 
+For B-Fast sepcific requirements read [Schultz et al. 2013](http://dx.doi.org/10.1109/JSTARS.2015.2477473) for further background.
 
-## Inputs
+### Inputs
 
 - AOI
 
@@ -25,4 +23,6 @@ For B-Fast sepcific requirements [this research article](https://www.researchgat
 
 - Visualize the different analysis layers
 - Export the analysis layers as a multi-band image
+
+
 
