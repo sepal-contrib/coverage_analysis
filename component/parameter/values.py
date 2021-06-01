@@ -8,28 +8,27 @@ measures = [
 ]
 
 # name of the file in the output directory 
-def asset_name(aoi_io, io, fnf=False):
+def asset_name(aoi_model, model, fnf=False):
     """return the standard name of your asset/file"""
     
+    filename = f"coverage_{aoi_model.name}_{model.start}_{model.end}"
 
-    filename = f"coverage_{aoi_io.get_aoi_name()}_{io.start}_{io.end}"
-
-    if io.l8 != 'NONE':
+    if model.l8 != 'NONE':
         filename += f"_L8"
 
-    if io.l7:
+    if model.l7:
         filename += '_L7'
 
-    if io.l5:
+    if model.l5:
         filename += '_L5'
 
-    if io.l4:
+    if model.l4:
         filename += '_L4'
 
-    if io.s2:
+    if model.s2:
         filename += '_S2'
 
-    if io.sr:
+    if model.sr:
         filename += '_SR'
     else:
         filename += '_TOA'
