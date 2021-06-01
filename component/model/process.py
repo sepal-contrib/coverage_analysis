@@ -12,7 +12,7 @@ class Process (model.Model):
     # set up your inputs
     start = Any(None).tag(sync=True)
     end = Any(None).tag(sync=True)
-    sensors = Any(None).tag(sync=True)
+    sensors = Any([]).tag(sync=True)
     t2 = Any(False).tag(sync=True)
     sr = Any(False).tag(sync=True)
     measure = Any('pixel_count').tag(sync=True) 

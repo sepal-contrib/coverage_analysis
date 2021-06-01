@@ -1,4 +1,5 @@
 ### TILE SHOWING THE RESULTS
+from datetime import datetime as dt
 
 from sepal_ui import sepalwidgets as sw
 from sepal_ui import mapping as sm
@@ -51,11 +52,20 @@ class SelectionTile(sw.Tile):
         self.btn.on_event("click", self._on_run)
         
     
-    @su.loading_button(debug=True)
+    @su.loading_button(debug=False)
     def _on_run(self, widget, data, event): 
             
         # check that the input that you're gonna use are set (Not mandatory)
-        if not self.alert.check_input(self.aoi_model.name, ms.process.no_aoi): return widget.toggle_loading()
+        if not self.alert.check_input(self.aoi_model.name, ms.process.no_aoi): return
+        if not self.alert.check_input(self.model.sensors, ms.process.no_sensors): return
+        if not self.alert.check_input(self.model.start, ms.process.no_date): return
+        if not self.alert.check_input(self.model.end, ms.process.no_date): return
+        
+        # check the dates   
+        d_format = "%Y-%m-%d"
+        if not dt.strptime(self.model.start, d_format) < dt.strptime(self.model.end, d_format):
+            self.alert.add_msg(ms.process.no_order, 'error')
+            return
                    
         dataset = cs.analysis(
             self.aoi_model.feature_collection,

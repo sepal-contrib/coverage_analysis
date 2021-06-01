@@ -15,6 +15,9 @@
         "end_computation": "Computation complete",
         "title":           "Process tile",
         "no_aoi":          "Please provide an AOI",
+        "no_date": "No dates have been specified",
+        "no_order": "The start date need to be prior to end date",
+        "no_sensors": "You need to select at least 1 sensor",
         "gee_btn":         "Generate EE Asset",
         "task_start":      "Task launched in GEE",
         "task_launched":   "Export of {} launched in GEE"
