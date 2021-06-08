@@ -14,88 +14,34 @@ from component import parameter as pm
 # if you want to create extra reusable object, you can define them in an extra widget.py file 
 class ExportTile(sw.Tile):
     
-    def __init__(self, aoi_io, io, **kwargs):
+    def __init__(self, aoi_model, model, **kwargs):
 
-        # gather the io
-        self.aoi_io = aoi_io
-        self.io = io
+        # gather the model
+        self.aoi_model = aoi_model
+        self.model = model
 
-        # create an output alert 
-        self.output = sw.Alert()
-
-        #
-        self.stats_exp = sw.Markdown(pm.stats_exp)
-        
-        self.count = v.Switch(
-                class_  = "ml-5",
-                label   = ms.export.count,
-                v_model = True
-            )
-
-        self.all = v.Switch(
-                class_  = "ml-5",
-                label   = ms.export.all,
-                v_model = False
-            )
-        
-        self.ndvi_median = v.Switch(
-                class_  = "ml-5",
-                label   = ms.export.ndvi_median,
-                v_model = False
-            )
-
-        self.ndvi_stdDev = v.Switch(
-                class_  = "ml-5",
-                label   = ms.export.ndvi_stdDev,
-                v_model = False
-            )
-
-        
-        
-        # Temporal extent
-        self.temporal_exp = sw.Markdown(pm.temporal_exp)
-        self.total_exp = v.Switch(
-                class_  = "ml-5",
-                label   = ms.export.total_exp,
-                v_model = True
-            )
-        
-        self.annual_exp = v.Switch(
-                class_  = "ml-5",
-                label   = ms.export.annual_exp,
-                v_model = False
-            )
-
-        
-
-        self.scale = v.TextField(
-            label   = ms.export.scale,
-            v_model = 30
-        )
-        
+        # widgets
+        self.stats = v.Select(label=ms.export.stats, v_model=model.stats, items=pm.stats, chips=True, multiple=True)
+        self.temps = v.Select(label=ms.export.temps, v_model=model.temps, items=pm.temps, chips=True, multiple=True)
+        self.scale = v.TextField(label=ms.export.scale, v_model=30)
         
         # create buttons
         self.asset_btn = sw.Btn(ms.export.asset_btn, 'mdi-download', disabled=True, class_='ma-5')
         self.sepal_btn = sw.Btn(ms.export.sepal_btn, 'mdi-download', disabled=True, class_='ma-5')
-        #self.download_image = sw.DownloadBtn(ms.export.down_btn)
 
         # bindings
-        self.output = sw.Alert() \
-            .bind(self.all, self.io, 'all') \
-            .bind(self.count, self.io, 'count') \
-            .bind(self.ndvi_median, self.io, 'ndvi_median') \
-            .bind(self.ndvi_stdDev, self.io, 'ndvi_stdDev') \
-            .bind(self.annual_exp, self.io, 'annual_exp') \
-            .bind(self.total_exp, self.io, 'total_exp') \
-            .bind(self.scale, self.io, 'scale') 
+        self.model \
+            .bind(self.stats, 'stats') \
+            .bind(self.temps, 'temps') \
+            .bind(self.scale, 'scale') 
 
         # note that btn and output are not a madatory attributes 
         super().__init__(
             id_ = "export_widget",
             title = ms.export.title,
-            inputs = [self.stats_exp, self.all, self.count, self.ndvi_median, self.ndvi_stdDev, self.temporal_exp , self.total_exp, self.annual_exp, self.scale],
-            output = self.output,
-            btn = v.Layout(row=True, children = [self.asset_btn, self.sepal_btn])
+            inputs = [self.stats, self.temps, self.scale],
+            alert = sw.Alert(),
+            btn = v.Layout(row=True, children =[self.asset_btn, self.sepal_btn])
         )
 
         #link the btn 
@@ -107,16 +53,16 @@ class ExportTile(sw.Tile):
         def unmask(image):
             return image.unmask(1)
             
-        coll = self.io.dataset
-        start = self.io.start
-        end = self.io.end
-        aoi = self.aoi_io.get_aoi_ee()
+        coll = self.model.dataset
+        start = self.model.start
+        end = self.model.end
+        aoi = self.aoi_model.feature_collection
         
         dataset = None
-        if self.io.total_exp:
+        
+        if 'total_exp' in self.model.temps:
            
-            if self.io.all:
-                
+            if 'all' in self.model.stats:
                 
                 pixel_all = ( 
                     coll
@@ -129,7 +75,7 @@ class ExportTile(sw.Tile):
                 
                 dataset = pixel_all
         
-            if self.io.count:
+            if 'count' in self.model.stats:
                 pixel_total = ( 
                     coll
                         .select('B3')
@@ -140,7 +86,7 @@ class ExportTile(sw.Tile):
                 
                 dataset = dataset.addBands(pixel_total) if dataset else pixel_total
             
-            if self.io.ndvi_median:
+            if 'ndvi_median' in self.model.stats:
                 ndvi_med_total = ( 
                     coll
                         .select('NDVI')
@@ -151,7 +97,7 @@ class ExportTile(sw.Tile):
                 
                 dataset = dataset.addBands(ndvi_med_total) if dataset else ndvi_med_total
             
-            if self.io.ndvi_stdDev:
+            if 'ndvi_stdDev' in self.model.stats:
                 ndvi_sd_total = ( 
                     coll
                         .select('NDVI')
@@ -162,7 +108,7 @@ class ExportTile(sw.Tile):
             
                 dataset = dataset.addBands(ndvi_sd_total) if dataset else ndvi_sd_total
                 
-        if self.io.annual_exp:
+        if 'annual_exp' in self.model.temps:
 
             end, end_y = ee.Date(end).getInfo()['value'], 0
             while end > end_y:
@@ -178,7 +124,7 @@ class ExportTile(sw.Tile):
                 if end_y > end:
                     end_y = end
 
-                if self.io.all:
+                if 'all' in self.model.stats:
                     pixel_all = ( 
                         coll
                             .select('B3')
@@ -191,7 +137,7 @@ class ExportTile(sw.Tile):
                     dataset = dataset.addBands(pixel_all) if dataset else pixel_all
                 
                 
-                if self.io.count:
+                if 'count' in self.model.stats:
                     # create collection and fill list
                     pixel_year = (
                         coll
@@ -204,7 +150,7 @@ class ExportTile(sw.Tile):
                     dataset = dataset.addBands(pixel_year) if dataset else pixel_year
                    
                 
-                if self.io.ndvi_median:
+                if 'ndvi_median' in self.model.stats:
                     
                     # create collection and fill list
                     ndvi_med_year = (
@@ -218,7 +164,7 @@ class ExportTile(sw.Tile):
                     dataset = dataset.addBands(ndvi_med_year) if dataset else ndvi_med_year   
                 
                 
-                if self.io.ndvi_stdDev:
+                if 'ndvi_stdDev' in self.model.stats:
                     
                     # create collection and fill list
                     ndvi_sd_year = (
@@ -240,49 +186,50 @@ class ExportTile(sw.Tile):
     def _on_asset_click(self, widget, data, event):
         
         widget.toggle_loading()
-        self.sepal_btn.toggle_loading()
+        
+        # check inputs
+        if not self.alert.check_input(self.model.stats, ms.process.no_input): return widget.toggle_loading()
+        if not self.alert.check_input(self.model.temps, ms.process.no_input): return widget.toggle_loading()
+        if not self.alert.check_input(self.model.scale, ms.process.no_input): return widget.toggle_loading()
         
         dataset = self._select_layers()
 
         asset_id = scripts.export_to_asset(
-            self.aoi_io, 
+            self.aoi_model, 
             dataset, 
-            pm.asset_name(self.aoi_io, self.io),
-            self.io.scale,
-            self.output
+            pm.asset_name(self.aoi_model, self.model),
+            self.model.scale,
+            self.alert
         )
 
         widget.toggle_loading()
-        self.sepal_btn.toggle_loading()
         
         return
     
     def _on_sepal_click(self, widget, data, event):
         
         widget.toggle_loading()
-        self.asset_btn.toggle_loading()
+        
+        # check inputs
+        if not self.alert.check_input(self.model.stats, ms.process.no_input): return widget.toggle_loading()
+        if not self.alert.check_input(self.model.temps, ms.process.no_input): return widget.toggle_loading()
+        if not self.alert.check_input(self.model.scale, ms.process.no_input): return widget.toggle_loading()
         
         # get selected layers
         dataset = self._select_layers()
         
         try:
             pathname = scripts.export_to_sepal(
-                self.aoi_io, 
+                self.aoi_model, 
                 dataset, 
-                pm.asset_name(self.aoi_io, self.io), 
-                self.io.scale, 
-                self.output
+                pm.asset_name(self.aoi_model, self.model), 
+                self.model.scale, 
+                self.alert
             )
-            
-
-            # link it in the download btn 
-            #self.download_image.set_url(str(pathname))
-            #self.download_image.set_url(str(pathname_fnf))
         
         except Exception as e:
             self.output.add_live_msg(str(e), 'error')
             
         widget.toggle_loading()
-        self.asset_btn.toggle_loading()
         
         return

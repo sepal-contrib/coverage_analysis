@@ -11,53 +11,41 @@ from component import parameter as pm
 # create an empty result tile that will be filled with displayable plot, map, links, text
 class VisualizationTile(sw.Tile):
     
-    def __init__(self, aoi_io, io, **kwargs):
+    def __init__(self, aoi_model, model, **kwargs):
         
-        # gather the io
-        self.aoi_io = aoi_io
-        self.io = io
+        # gather the model
+        self.aoi_model = aoi_model
+        self.model = model
         
+        # widgets
+        self.measure = v.Select(label=ms.selection.measure, v_model=None, items=pm.measures)
+        self.annual = v.Switch(class_ ="ml-5", label=ms.selection.annual, v_model=False)
         
-        self.stats = sw.Markdown(pm.stats)
-        self.measure = v.Select(
-            label   = ms.selection.measure,
-            v_model = None,
-            items = pm.measures     
-        )
-        
-        self.annual = v.Switch(
-                class_  = "ml-5",
-                label   = ms.selection.annual,
-                v_model = False
-            )
-        
-        # add the widgets 
+        # add the map
         self.m = sm.SepalMap()
         
         # create an output alert 
-        self.output = sw.Alert() \
-            .bind(self.measure, self.io, 'measure') \
-            .bind(self.annual, self.io, 'annual')
+        self.model.bind(self.measure, 'measure').bind(self.annual, 'annual')
        
         # construct the Tile with the widget we have initialized 
         super().__init__(
             id_    = "visualization_widget", # the id will be used to make the Tile appear and disapear
             title  = ms.visualization.title, # the Title will be displayed on the top of the tile
-            inputs = [self.stats, self.measure, self.annual, self.m],
-            output = self.output
+            inputs = [self.measure, self.annual, self.m],
+            alert = sw.Alert()
         )
         
         self.measure.observe(self._on_change, 'v_model')
         self.annual.observe(self._on_change, 'v_model')
+    
+    def _on_change(self, change): 
         
-    def _on_change(self, change):
+        coll = self.model.dataset
+        start = self.model.start
+        end = self.model.end
+        aoi = self.aoi_model.feature_collection
         
-        coll = self.io.dataset
-        start = self.io.start
-        end = self.io.end
-        aoi = self.aoi_io.get_aoi_ee()
-        
-        if self.io.measure == 'pixel_count_all':
+        if self.model.measure == 'pixel_count_all':
             
             def unmask(image):
                 return image.unmask(1)
@@ -66,24 +54,24 @@ class VisualizationTile(sw.Tile):
             coll = coll.select('B3').map(unmask)
             viz = pm.visParamCount
 
-        if self.io.measure == 'pixel_count':
+        if self.model.measure == 'pixel_count':
             reducer = ee.Reducer.count()
             coll = coll.select('B3')
             viz = pm.visParamCount
 
-        elif self.io.measure == 'ndvi_median':
+        elif self.model.measure == 'ndvi_median':
             reducer = ee.Reducer.median()
             coll = coll.select('NDVI')
             viz = pm.visParamNDVIMean
             
-        elif self.io.measure == 'ndvi_stdDev':
+        elif self.model.measure == 'ndvi_stdDev':
             reducer = ee.Reducer.median()
             coll = coll.select('NDVI')
             viz = pm.visParamNDVIStdDev
             
         list_of_images = {}
         
-        if self.io.annual:
+        if self.model.annual:
 
             end, end_y = ee.Date(end).getInfo()['value'], 0
             while end > end_y:
@@ -103,7 +91,7 @@ class VisualizationTile(sw.Tile):
                 list_of_images[start] = (
                     coll
                         .filterDate(start, end_y)
-                        .reduce(reducer).rename(self.io.measure)
+                        .reduce(reducer).rename(self.model.measure)
                         .clip(aoi)
                 )
 
@@ -114,18 +102,20 @@ class VisualizationTile(sw.Tile):
             list_of_images['total'] = (
                 coll
                     .filterDate(start, end)
-                    .reduce(reducer).rename(self.io.measure)
+                    .reduce(reducer).rename(self.model.measure)
                     .clip(aoi)
             )
 
         # Display the map
         display_result(
-            self.aoi_io.get_aoi_ee(),
+            self.aoi_model.feature_collection,
             list_of_images,
             self.m, 
             viz,
-            self.io.measure,
-            self.io.annual
+            self.model.measure,
+            self.model.annual
         )
+        
+        return
         
         
