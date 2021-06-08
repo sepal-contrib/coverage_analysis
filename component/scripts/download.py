@@ -8,7 +8,7 @@ from component.message import ms
 from component import parameter as pm
 from .gdrive import gdrive
 
-def digest_tiles(filename, result_dir, output, final_path):
+def digest_tiles(aoi_io, filename, result_dir, output, final_path):
     
     if final_path.is_file():
         output.add_live_msg(ms.download.file_exist.format(final_path), 'warning')
