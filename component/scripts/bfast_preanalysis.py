@@ -14,21 +14,19 @@ from .cloud_masking import cloud_mask_S2
 
 ee.Initialize()
 
-def analysis(aoi, start, end, sensors, t2, sr):
+def analysis(aoi, start, end, l8, l7, l5, l4, t2, s2, sr):
     
     coll = None
     coll_type = 'SR' if sr else 'TOA'
     
-    
-    
-    if 'l8'  in sensors:
-        
+    if l8:
+
         # create collection (with masking) and add NDVI 
         coll = create_collection(
             ee.ImageCollection(f"LANDSAT/LC08/C01/T1_{coll_type}"), t2, start, end, aoi, sr
         ).map(addNDVIL8)
 
-    if 'l7' in sensors:
+    if l7:
         
         # create collection (with masking) and add NDVI 
         l7_coll = create_collection(
@@ -39,7 +37,7 @@ def analysis(aoi, start, end, sensors, t2, sr):
         coll = coll.merge(l7_coll) if coll else l7_coll
             
         
-    if 'l5' in sensors:
+    if l5:
 
         # create collection (with masking) and add NDVI 
         l5_coll = create_collection(
@@ -50,7 +48,7 @@ def analysis(aoi, start, end, sensors, t2, sr):
         coll = coll.merge(l5_coll) if coll else l5_coll
         
                 
-    if 'l4' in sensors:
+    if l4:
 
         # create collection (with masking) and add NDVI 
         l4_coll = create_collection(
@@ -60,7 +58,7 @@ def analysis(aoi, start, end, sensors, t2, sr):
         # merge collection
         coll = coll.merge(l4_coll) if coll else l4_coll
     
-    if 's2' in sensors:
+    if s2:
         
         # define collection name based on SR or TOA
         
@@ -73,13 +71,15 @@ def analysis(aoi, start, end, sensors, t2, sr):
                 .filterDate(start, end)
         )
             
+
         # Import and filter s2cloudless.
         s2_cloudless_coll = (
             ee.ImageCollection('COPERNICUS/S2_CLOUD_PROBABILITY')
                 .filterBounds(aoi)
                 .filterDate(start, end)
         )
-                 
+            
+                  
         # Join the filtered s2cloudless collection to the SR collection by the 'system:index' property.
         joined_coll = ee.ImageCollection(ee.Join.saveFirst('s2cloudless').apply(**{
         'primary': s2_coll,
@@ -95,5 +95,9 @@ def analysis(aoi, start, end, sensors, t2, sr):
         
         # merge collection
         coll = coll.merge(s2_coll) if coll else s2_coll
+        
+ 
+     # let the user know that you managed to do something
+    #output.add_live_msg(ms.process.end_computation, 'success')
     
     return coll
