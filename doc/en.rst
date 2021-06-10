@@ -2,11 +2,12 @@ Coverage analysis tool for optical data
 =======================================
 
 Module using the `sepal_ui <https://github.com/12rambau/sepal_ui>`_ framework and an interactive **Voila** dashboard to create maps of cloud-free observations for major optical satellites as available on Google's Earth Engine Platform.
-The framework follows themain ideas from bfasts' countObs and summaryBrick functions as described [here](http://www.loicdutrieux.net/bfastSpatial/#Data_Inventory). 
 
-For B-Fast sepcific requirements read [Schultz et al. 2013](http://dx.doi.org/10.1109/JSTARS.2015.2477473) for further background.
+The framework follows the logic of bfasts' countObs and summaryBrick functions as described [here](http://www.loicdutrieux.net/bfastSpatial/#Data_Inventory). 
 
-The process is done in 3 steps described in the bellow sections
+For bfast specific requirements check [Schultz et al. 2013](http://dx.doi.org/10.1109/JSTARS.2015.2477473) for further background.
+
+The process is done in 3 steps described in the below sections:
 
 Select an AOI
 -------------
@@ -26,20 +27,20 @@ Select dataset parameters
 
 To perform the bfast preanalysis you need to provide the tool with key parameters: 
 
--   **date range**: The extreme dates of your analysis
--   **sensors**: The list of senesors you want to use (landsat family + sentinel 2)
--   **Tier 2**: for the landsat familly sensors you can also include Tier 2 images to the analysis
--   **SR**: wheteher to use Surface reflectance images (SR). default to Top of atmosphere (TOA)
+-   **date range**: The start and end date of your analysis
+-   **sensors**: The list of sensors you want to use (Landsat missions & Sentinel-2)
+-   **Tier 2**: Tier 2 images of the Landsat missions (this might lead to wrong results)
+-   **SR**: whether to use Surface Reflectance images (SR). default to Top of atmosphere (TOA)
 
-Once all your parameters are selected you can click on the btn to load your dataset
+Once all your parameters are selected you need to click on the button to make your selection effective
 
 .. figure:: https://raw.githubusercontent.com/BuddyVolly/coverage_analysis/main/doc/img/parameters.png 
 
 Display dataset
 ---------------
 
-Once you have selected your parameter you can move to the Visualization tile. 
-Select a statistical measure to display in the following list:
+After having selected your parameters you can move to the Visualization tile. 
+Select one of the statistical measures to display in the following list:
 
 -   Cloud-free pixel count
 -   Total pixel count (i.e. scene coverage)
@@ -52,12 +53,12 @@ You can also decide to produce stats on yearly basis using the provided switch
 
 .. note::
 
-    The image will be dynamically reevaluate and recentered on every change
+    The image will be dynamically re-evaluated and re-centered on every change
     
 Export dataset 
 --------------
 
-Once you're happy with the information displayed then can be exported to be further used in a GIS software or in a GEE process. The tool provide 2 main exportation options, as an asset(in GEE) or as a Tif file in SEPAL. 
+Once you're happy with the information displayed then can be exported to be further used in a GIS software or in a GEE process. The tool provides 2 main exportation options, as an asset(in GEE) or as a Tif file in SEPAL. 
 
 Both use the GEE export system and share the same set of parameter: 
 
@@ -73,7 +74,7 @@ Both use the GEE export system and share the same set of parameter:
     -   full timespan calculation(s)
     -   annual calculation(s)
 
--   scale: the scale to us in GEE exported file
+-   scale: the resolution (in meters) to us in GEE exported file
 
 .. figure:: https://raw.githubusercontent.com/BuddyVolly/coverage_analysis/main/doc/img/export.png 
 
