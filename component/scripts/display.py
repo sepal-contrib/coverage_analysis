@@ -51,6 +51,6 @@ def display_result(ee_aoi, dataset, m, vis, measure, annual):
         #if dataset[year].reduceRegion(ee.Reducer.max(), ee_aoi.geometry(), 5000).getInfo():
         m.addLayer(dataset[year], vis, f'{measure} {label}')
     
-    m.add_colorbar(colors=vis['palette'], vmin=vis['min'], vmax=vis['max'], layer_name="Colorbar", position='bottomleft', transparent_bg=True)
+    m.add_colorbar(colors=vis['palette'], vmin=vis['min'], vmax=vis['max'], layer_name="Colorbar", position='bottomleft', transparent_bg=False)
     
     return
