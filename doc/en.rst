@@ -3,9 +3,9 @@ Coverage analysis tool for optical data
 
 Module using the `sepal_ui <https://github.com/12rambau/sepal_ui>`_ framework and an interactive **Voila** dashboard to create maps of cloud-free observations for major optical satellites as available on Google's Earth Engine Platform.
 
-The framework follows the logic of bfasts' countObs and summaryBrick functions as described [here](http://www.loicdutrieux.net/bfastSpatial/#Data_Inventory). 
+The framework follows the logic of bfasts' countObs and summaryBrick functions as described `here <http://www.loicdutrieux.net/bfastSpatial/#Data_Inventory>`_. 
 
-For bfast specific requirements check [Schultz et al. 2013](http://dx.doi.org/10.1109/JSTARS.2015.2477473) for further background.
+For bfast specific requirements check `Schultz et al. 2013 <http://dx.doi.org/10.1109/JSTARS.2015.2477473>`_ for further background.
 
 The process is done in 3 steps described in the below sections:
 
