@@ -1,5 +1,6 @@
 ## Coverage analysis tool for optical data
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+[![Black badge](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
 
 
 Module using the `sepal_ui` framework and an interactive **Voila** dashboard to create maps of cloud-free observations for major optical satellites as available on Google's Earth Engine Platform.
