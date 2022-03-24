@@ -18,7 +18,7 @@ git+https://github.com/openforis/earthengine-api.git@v0.1.270#egg=earthengine-ap
 sepal_ui==2.4.0
 
 # custom libs
-click<8,>=4.0 # to stay inlined with ipywidgets
+click<8,>=4.0
 ipywidgets==7.6.5
 google-api-python-client<2,>=1.12.1
 ipyvuetify==1.8.1
