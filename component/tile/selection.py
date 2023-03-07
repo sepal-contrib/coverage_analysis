@@ -9,6 +9,7 @@ import ipyvuetify as v
 from component.message import ms
 from component import scripts as cs
 from component import parameter as pm
+from component import widget as cw
 
 # create an empty result tile that will be filled with displayable plot, map, links, text
 class SelectionTile(sw.Tile):
@@ -24,8 +25,8 @@ class SelectionTile(sw.Tile):
         w_time_title = v.Html(
             tag="H3", class_="mt-3", children=[ms.selection.time_range]
         )
-        self.start_picker = sw.DatePicker(label=ms.selection.start)
-        self.end_picker = sw.DatePicker(label=ms.selection.end)
+        self.start_picker = cw.DatePicker(label=ms.selection.start)
+        self.end_picker = cw.DatePicker(label=ms.selection.end)
         w_time_range = v.Layout(row=True, children=[self.start_picker, self.end_picker])
 
         w_collection_title = v.Html(
