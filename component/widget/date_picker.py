@@ -11,7 +11,7 @@ from traitlets import Bool, link, observe
 __all__ = ["DatePicker"]
 
 
-class DatePicker(sw.Layout):
+class DatePicker(sw.SepalWidget, v.Layout):
 
     menu: Optional[v.Menu] = None
     "the menu widget to display the datepicker"
