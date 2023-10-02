@@ -4,7 +4,7 @@ import ee
 
 from matplotlib import pyplot as plt
 
-from component.message import ms
+from component.message import cm
 from component import parameter as pm
 
 from .gee import *
@@ -34,7 +34,7 @@ def export_to_asset(aoi_model, dataset, filename, scale, output):
 
     # check if the asset already exist
     if is_asset(str(asset_name)):
-        output.add_live_msg(ms.gee.asset_exist.format(asset_name), "warning")
+        output.add_live_msg(cm.gee.asset_exist.format(asset_name), "warning")
         return asset_name
 
     # launch the export
@@ -50,7 +50,7 @@ def export_to_asset(aoi_model, dataset, filename, scale, output):
     task = ee.batch.Export.image.toAsset(**task_config)
     task.start()
 
-    output.add_live_msg(ms.process.task_start.format(asset_name), "success")
+    output.add_live_msg(cm.process.task_start.format(asset_name), "success")
 
     # tell me if you want to display the exportation status live or not
     return asset_name
@@ -76,10 +76,10 @@ def export_to_sepal(aoi_model, dataset, filename, scale, output):
     # create merge name
     filename_merge = pm.result_dir.joinpath(f"{filename}_merge.tif")
     if filename_merge.is_file():
-        output.add_live_msg(ms.result.file_exist.format(filename_merge), "warning")
+        output.add_live_msg(cm.result.file_exist.format(filename_merge), "warning")
         return filename_merge
 
-    output.add_live_msg(ms.download.start_download)
+    output.add_live_msg(cm.download.start_download)
 
     # get the root folder of the user
     folder = Path(ee.data.getAssetRoots()[0]["id"])
@@ -99,16 +99,16 @@ def export_to_sepal(aoi_model, dataset, filename, scale, output):
     # wait for the end of the download process
     if downloads:
         wait_for_completion([filename], output)
-    output.add_live_msg(ms.gee.tasks_completed, "success")
+    output.add_live_msg(cm.gee.tasks_completed, "success")
 
     # digest the tiles
     digest_tiles(filename, pm.result_dir, output, filename_merge)
 
-    output.add_live_msg(ms.download.remove_gdrive)
+    output.add_live_msg(cm.download.remove_gdrive)
     # remove the files from drive
     drive_handler.delete_files(drive_handler.get_files(filename))
 
     # display msg
-    output.add_live_msg(ms.download.completed, "success")
+    output.add_live_msg(cm.download.completed, "success")
 
     return filename_merge

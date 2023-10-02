@@ -1,13 +1,4 @@
-import time
-
-import numpy as np
-import pandas as pd
 import ee
-import ipyvuetify as v
-from matplotlib import pyplot as plt
-
-from component.message import ms
-from component import parameter as pm
 
 from .helpers import *
 from .cloud_masking import cloud_mask_S2
@@ -16,12 +7,10 @@ ee.Initialize()
 
 
 def analysis(aoi, start, end, sensors, t2, sr):
-
     coll = None
     coll_type = "SR" if sr else "TOA"
 
     if "l8" in sensors:
-
         # create collection (with masking) and add NDVI
         coll = create_collection(
             ee.ImageCollection(f"LANDSAT/LC08/C01/T1_{coll_type}"),
@@ -33,7 +22,6 @@ def analysis(aoi, start, end, sensors, t2, sr):
         ).map(addNDVIL8)
 
     if "l7" in sensors:
-
         # create collection (with masking) and add NDVI
         l7_coll = create_collection(
             ee.ImageCollection(f"LANDSAT/LE07/C01/T1_{coll_type}"),
@@ -48,7 +36,6 @@ def analysis(aoi, start, end, sensors, t2, sr):
         coll = coll.merge(l7_coll) if coll else l7_coll
 
     if "l5" in sensors:
-
         # create collection (with masking) and add NDVI
         l5_coll = create_collection(
             ee.ImageCollection(f"LANDSAT/LT05/C01/T1_{coll_type}"),
@@ -63,7 +50,6 @@ def analysis(aoi, start, end, sensors, t2, sr):
         coll = coll.merge(l5_coll) if coll else l5_coll
 
     if "l4" in sensors:
-
         # create collection (with masking) and add NDVI
         l4_coll = create_collection(
             ee.ImageCollection(f"LANDSAT/LT04/C01/T1_{coll_type}"),
@@ -78,7 +64,6 @@ def analysis(aoi, start, end, sensors, t2, sr):
         coll = coll.merge(l4_coll) if coll else l4_coll
 
     if "s2" in sensors:
-
         # define collection name based on SR or TOA
 
         s2_coll_name = "S2_SR" if sr else "S2"

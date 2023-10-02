@@ -1,7 +1,7 @@
 import ee
 import ipyvuetify as v
 
-from component.message import ms
+from component.message import cm
 from component import parameter as pm
 
 
