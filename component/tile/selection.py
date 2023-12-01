@@ -65,7 +65,7 @@ class SelectionTile(sw.Tile):
         # now that the Tile is created we can link it to a specific function
         self.btn.on_event("click", self._on_run)
 
-    @su.loading_button(debug=False)
+    @su.loading_button()
     def _on_run(self, widget, data, event):
         # check that the input that you're gonna use are set (Not mandatory)
         if not self.alert.check_input(self.aoi_model.name, cm.process.no_aoi):
