@@ -8,41 +8,41 @@ from sepal_ui import sepalwidgets as sw
 import ipyvuetify as v
 
 from component import scripts
-from component.message import ms
+from component.message import cm
 from component import parameter as pm
+
 
 # the tiles should all be heriting from the sepal_ui Tile object
 # if you want to create extra reusable object, you can define them in an extra widget.py file
 class ExportTile(sw.Tile):
     def __init__(self, aoi_model, model, **kwargs):
-
         # gather the model
         self.aoi_model = aoi_model
         self.model = model
 
         # widgets
         self.stats = v.Select(
-            label=ms.export.stats,
+            label=cm.export.stats,
             v_model=model.stats,
             items=pm.stats,
             chips=True,
             multiple=True,
         )
         self.temps = v.Select(
-            label=ms.export.temps,
+            label=cm.export.temps,
             v_model=model.temps,
             items=pm.temps,
             chips=True,
             multiple=True,
         )
-        self.scale = v.TextField(label=ms.export.scale, v_model=30)
+        self.scale = v.TextField(label=cm.export.scale, v_model=30)
 
         # create buttons
         self.asset_btn = sw.Btn(
-            ms.export.asset_btn, "mdi-download", disabled=True, class_="ma-5"
+            cm.export.asset_btn, "mdi-download", disabled=True, class_="ma-5"
         )
         self.sepal_btn = sw.Btn(
-            ms.export.sepal_btn, "mdi-download", disabled=True, class_="ma-5"
+            cm.export.sepal_btn, "mdi-download", disabled=True, class_="ma-5"
         )
 
         # bindings
@@ -53,7 +53,7 @@ class ExportTile(sw.Tile):
         # note that btn and output are not a madatory attributes
         super().__init__(
             id_="export_widget",
-            title=ms.export.title,
+            title=cm.export.title,
             inputs=[self.stats, self.temps, self.scale],
             alert=sw.Alert(),
             btn=v.Layout(row=True, children=[self.asset_btn, self.sepal_btn]),
@@ -75,9 +75,7 @@ class ExportTile(sw.Tile):
         dataset = None
 
         if "total_exp" in self.model.temps:
-
             if "all" in self.model.stats:
-
                 pixel_all = (
                     coll.select("B3")
                     .filterDate(start, end)
@@ -125,10 +123,8 @@ class ExportTile(sw.Tile):
                 dataset = dataset.addBands(ndvi_sd_total) if dataset else ndvi_sd_total
 
         if "annual_exp" in self.model.temps:
-
             end, end_y = ee.Date(end).getInfo()["value"], 0
             while end > end_y:
-
                 # advance year and just get the year part so we make sure to get the 1st of Jan
                 advance_start = ee.Date(start).advance(1, "year").format("Y")
                 year = ee.Date(start).format("Y").getInfo()
@@ -165,7 +161,6 @@ class ExportTile(sw.Tile):
                     dataset = dataset.addBands(pixel_year) if dataset else pixel_year
 
                 if "ndvi_median" in self.model.stats:
-
                     # create collection and fill list
                     ndvi_med_year = (
                         coll.select("NDVI")
@@ -180,7 +175,6 @@ class ExportTile(sw.Tile):
                     )
 
                 if "ndvi_stdDev" in self.model.stats:
-
                     # create collection and fill list
                     ndvi_sd_year = (
                         coll.select("NDVI")
@@ -200,15 +194,14 @@ class ExportTile(sw.Tile):
         return dataset
 
     def _on_asset_click(self, widget, data, event):
-
         widget.toggle_loading()
 
         # check inputs
-        if not self.alert.check_input(self.model.stats, ms.process.no_input):
+        if not self.alert.check_input(self.model.stats, cm.process.no_input):
             return widget.toggle_loading()
-        if not self.alert.check_input(self.model.temps, ms.process.no_input):
+        if not self.alert.check_input(self.model.temps, cm.process.no_input):
             return widget.toggle_loading()
-        if not self.alert.check_input(self.model.scale, ms.process.no_input):
+        if not self.alert.check_input(self.model.scale, cm.process.no_input):
             return widget.toggle_loading()
 
         dataset = self._select_layers()
@@ -226,15 +219,14 @@ class ExportTile(sw.Tile):
         return
 
     def _on_sepal_click(self, widget, data, event):
-
         widget.toggle_loading()
 
         # check inputs
-        if not self.alert.check_input(self.model.stats, ms.process.no_input):
+        if not self.alert.check_input(self.model.stats, cm.process.no_input):
             return widget.toggle_loading()
-        if not self.alert.check_input(self.model.temps, ms.process.no_input):
+        if not self.alert.check_input(self.model.temps, cm.process.no_input):
             return widget.toggle_loading()
-        if not self.alert.check_input(self.model.scale, ms.process.no_input):
+        if not self.alert.check_input(self.model.scale, cm.process.no_input):
             return widget.toggle_loading()
 
         # get selected layers

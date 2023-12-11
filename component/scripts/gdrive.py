@@ -5,7 +5,7 @@ import io
 from googleapiclient.http import MediaIoBaseDownload
 from apiclient import discovery
 
-from component.message import ms
+from component.message import cm
 from .gee import search_task
 
 import logging
@@ -15,7 +15,6 @@ logging.getLogger("googleapiclient.discovery_cache").setLevel(logging.ERROR)
 
 class gdrive(object):
     def __init__(self):
-
         self.initialize = ee.Initialize()
         self.credentials = ee.Credentials()
         self.service = discovery.build(
@@ -146,7 +145,7 @@ class gdrive(object):
                 task.start()
                 download = True
             else:
-                output.add_live_msg(ms.gdrive.already_done.format(filename), "success")
+                output.add_live_msg(cm.gdrive.already_done.format(filename), "success")
 
             return download
 

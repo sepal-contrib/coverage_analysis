@@ -4,23 +4,23 @@ from sepal_ui import sepalwidgets as sw
 from sepal_ui import mapping as sm
 import ipyvuetify as v
 
-from component.message import ms
+from component.message import cm
 from component.scripts import *
 from component import parameter as pm
+
 
 # create an empty result tile that will be filled with displayable plot, map, links, text
 class VisualizationTile(sw.Tile):
     def __init__(self, aoi_model, model, **kwargs):
-
         # gather the model
         self.aoi_model = aoi_model
         self.model = model
 
         # widgets
         self.measure = v.Select(
-            label=ms.selection.measure, v_model=None, items=pm.measures
+            label=cm.selection.measure, v_model=None, items=pm.measures
         )
-        self.annual = v.Switch(class_="ml-5", label=ms.selection.annual, v_model=False)
+        self.annual = v.Switch(class_="ml-5", label=cm.selection.annual, v_model=False)
 
         # add the map
         self.m = sm.SepalMap()
@@ -31,7 +31,7 @@ class VisualizationTile(sw.Tile):
         # construct the Tile with the widget we have initialized
         super().__init__(
             id_="visualization_widget",  # the id will be used to make the Tile appear and disapear
-            title=ms.visualization.title,  # the Title will be displayed on the top of the tile
+            title=cm.visualization.title,  # the Title will be displayed on the top of the tile
             inputs=[self.measure, self.annual, self.m],
             alert=sw.Alert(),
         )
@@ -40,7 +40,6 @@ class VisualizationTile(sw.Tile):
         self.annual.observe(self._on_change, "v_model")
 
     def _on_change(self, change):
-
         coll = self.model.dataset
         start = self.model.start
         end = self.model.end
@@ -73,10 +72,8 @@ class VisualizationTile(sw.Tile):
         list_of_images = {}
 
         if self.model.annual:
-
             end, end_y = ee.Date(end).getInfo()["value"], 0
             while end > end_y:
-
                 # advance year and just get the year part so we make sure to get the 1st of Jan
                 advance_start = ee.Date(start).advance(1, "year").format("Y")
 
