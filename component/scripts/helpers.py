@@ -1,6 +1,5 @@
 import ee
 
-ee.Initialize()
 from .cloud_masking import cloudMaskLsatTOA, cloudMaskLsatSR
 
 

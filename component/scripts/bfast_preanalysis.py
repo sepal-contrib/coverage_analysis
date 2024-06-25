@@ -3,8 +3,6 @@ import ee
 from .helpers import *
 from .cloud_masking import cloud_mask_S2
 
-ee.Initialize()
-
 
 def analysis(aoi, start, end, sensors, t2, sr):
     coll = None

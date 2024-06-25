@@ -2,8 +2,6 @@
 # it will help you to have control over their fonctionalities using object oriented programming
 import ee
 
-ee.Initialize()
-
 from sepal_ui import sepalwidgets as sw
 import ipyvuetify as v
 

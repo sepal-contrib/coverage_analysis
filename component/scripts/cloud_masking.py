@@ -1,8 +1,6 @@
 import ee
 import math
 
-ee.Initialize()
-
 
 def cloud_mask_S2(image):
 
